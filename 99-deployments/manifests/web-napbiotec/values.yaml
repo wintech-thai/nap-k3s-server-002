@@ -1,0 +1,96 @@
+wordpress:
+  enabled: true
+  replicaCount: 1
+  wordpressScheme: https
+  wordpressUsername: admin
+  existingSecret: 'wordpress-user-login'
+
+  image:
+    tag: 6.8.2
+    repository: bitnamilegacy/wordpress
+
+  ingress:
+    annotations:
+      nginx.ingress.kubernetes.io/proxy-body-size: 50m
+      kubernetes.io/ingress.allow-http: "true" #Wordpress will redirect to https internally  
+    ingressClassName: nginx
+    enabled: true
+    hostname: napbiotec.io
+    extraHosts:
+      - name: www.napbiotec.io
+      - name: www.napbiotec.com
+      - name: napbiotec.com
+      - name: napbiotec.wintech-thai.com
+
+  service:
+    type: ClusterIP
+
+  mariadb:
+    enabled: false
+
+  externalDatabase:
+    host: web-napbiotec-main-mysql
+    port: 3306
+    database: wordpress
+    user: root
+    existingSecret: wordpress-db-login
+
+  # WORKAROUND: see web-nap/values.yaml for why this is needed — chart
+  # doesn't populate WORDPRESS_DATABASE_HOST/PORT from externalDatabase.*,
+  # causing CrashLoopBackOff on every pod restart. Applied to all 7 WP sites.
+  extraEnvVars:
+    - name: WORDPRESS_DATABASE_HOST
+      value: web-napbiotec-main-mysql
+    - name: WORDPRESS_DATABASE_PORT_NUMBER
+      value: "3306"
+
+mysql:
+  enabled: true
+  image:
+    repository: bitnamilegacy/mysql
+    #tag: 8.0.28
+  auth:
+    database: wordpress
+    existingSecret: wordpress-db-login
+
+# onix-v2-jobs image for the backup/restore CronJobs below. Bump this after
+# tagging a new onix-v2-jobs release (Docker Hub: pjamenaja/onix-v2-jobs).
+onixJobs:
+  imageTag: develop-28f7fb8
+
+# The real backup for this site currently runs on its old GCP server
+# (~05:00-06:00 Asia/Bangkok daily), uploading to the devhubs-backup bucket.
+# On-prem's own backup stays suspended until after DNS cutover; restore runs
+# daily shortly after the GCP backup window to keep this on-prem copy synced
+# in the meantime.
+#
+# NOTE: the GCS bucket folder for this site is "napbiotec-v2" (a leftover
+# naming from the old server) even though the on-prem namespace/name here is
+# just "napbiotec" — see storage.bucketPath below, don't "fix" this to match.
+backupRestore:
+  enabled: true
+  namePrefix: napbiotec
+  timeZone: "Asia/Bangkok"
+  s3TransferTimeoutSec: 3600
+
+  backupSchedule: "0 19 * * *"
+  restoreSchedule: "30 6 * * *"
+  suspendBackup: true
+  suspendRestore: false
+  restartAppPodAfterRestore: "true"
+
+  db:
+    type: mysql
+    namespace: web-napbiotec
+    podName: web-napbiotec-main-mysql-0
+
+  app:
+    namespace: web-napbiotec
+    podKeyword: wordpress
+    dataPath: /bitnami/wordpress
+
+  storage:
+    url: https://storage.googleapis.com
+    bucket: devhubs-backup
+    bucketPath: napbiotec-v2
+    filePrefix: wp-backup-gke

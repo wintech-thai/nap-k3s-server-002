@@ -1,0 +1,88 @@
+wordpress:
+  enabled: true
+  replicaCount: 1
+  wordpressScheme: https
+  wordpressUsername: admin
+  existingSecret: 'wordpress-user-login'
+
+  image:
+    tag: 6.8.2
+    repository: bitnamilegacy/wordpress
+
+  ingress:
+    annotations:
+      nginx.ingress.kubernetes.io/proxy-body-size: 50m
+      kubernetes.io/ingress.allow-http: "true" #Wordpress will redirect to https internally  
+    ingressClassName: nginx #ให้เข้ามาที่ ingress ตัวนี้แทน
+    enabled: true
+    hostname: sandbox.napbiotec.io
+    extraHosts:
+      - name: sandbox.wintech-thai.com
+
+  service:
+    type: ClusterIP
+
+  mariadb:
+    enabled: false
+
+  externalDatabase:
+    host: web-sandbox-main-mysql
+    port: 3306
+    database: wordpress
+    user: root
+    existingSecret: wordpress-db-login
+
+  # WORKAROUND: see web-nap/values.yaml for why this is needed — chart
+  # doesn't populate WORDPRESS_DATABASE_HOST/PORT from externalDatabase.*,
+  # causing CrashLoopBackOff on every pod restart. Applied to all 7 WP sites.
+  extraEnvVars:
+    - name: WORDPRESS_DATABASE_HOST
+      value: web-sandbox-main-mysql
+    - name: WORDPRESS_DATABASE_PORT_NUMBER
+      value: "3306"
+
+mysql:
+  enabled: true
+  image:
+    repository: bitnamilegacy/mysql
+    #tag: 8.0.28
+  auth:
+    database: wordpress
+    existingSecret: wordpress-db-login
+
+# onix-v2-jobs image used by the backup/restore CronJobs below. Bump this
+# after tagging a new onix-v2-jobs release (Docker Hub: pjamenaja/onix-v2-jobs).
+onixJobs:
+  imageTag: develop-28f7fb8
+
+# WordPress backup/restore — see onix-v2-jobs/scripts-ruby/app-backup.rb and
+# app-restore.rb. To reuse this whole setup for another WordPress instance
+# (e.g. web-nap), copy this chart folder and only edit the values below —
+# nothing in templates/ needs to change.
+backupRestore:
+  enabled: true
+  namePrefix: sandbox
+  timeZone: "Asia/Bangkok"
+  s3TransferTimeoutSec: 3600
+
+  backupSchedule: "0 19 * * *"    # daily 19:00
+  restoreSchedule: "30 19 * * *"  # 30 min after backup, daily 19:30
+  suspendBackup: false
+  suspendRestore: true            # only meant to run on the NEW server once migration cutover begins
+  restartAppPodAfterRestore: "false"
+
+  db:
+    type: mysql                   # postgresql | mysql
+    namespace: web-sandbox
+    podName: web-sandbox-main-mysql-0
+
+  app:
+    namespace: web-sandbox
+    podKeyword: wordpress         # used to find the pod since its name changes on restart
+    dataPath: /bitnami/wordpress
+
+  storage:
+    url: https://storage.googleapis.com
+    bucket: devhubs-backup
+    bucketPath: sandbox
+    filePrefix: wp-backup
