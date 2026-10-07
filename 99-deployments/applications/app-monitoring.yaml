@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: web-youngyou
+  name: monitoring
 spec:
   generators:
   - clusters:
@@ -10,19 +10,27 @@ spec:
           custom: "true"
   template:
     metadata:
-      name: 'web-youngyou-production'
+      name: 'monitoring-{{name}}'
+      annotations:
+        argocd.argoproj.io/sync-wave: "0"
     spec:
       project: "default"
       source:
         repoURL: https://github.com/wintech-thai/nap-k3s-server-002.git
         targetRevision: "{{name}}" #Based on environment
-        path: '99-deployments/manifests/web-youngyou'
+        path: '99-deployments/manifests/monitoring'
+        helm:
+          ignoreMissingValueFiles: true
+          valueFiles:
+            - values.yaml
+            - values-{{name}}.yaml
       destination:
         name: in-cluster
-        namespace: web-youngyou
+        namespace: monitoring
       syncPolicy:
         automated:
           selfHeal: true
           prune: true
         syncOptions:
           - CreateNamespace=true
+          - ServerSideApply=true

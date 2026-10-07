@@ -72,7 +72,7 @@ backupRestore:
   timeZone: "Asia/Bangkok"
   s3TransferTimeoutSec: 3600
 
-  backupSchedule: "0 19 * * *"
+  backupSchedule: "0 1 * * *"
   restoreSchedule: "30 6 * * *"
   suspendBackup: true
   suspendRestore: true
@@ -92,4 +92,4 @@ backupRestore:
     url: https://storage.googleapis.com
     bucket: devhubs-backup
     bucketPath: youngyou
-    filePrefix: wp-backup-gke
+    filePrefix: wp-backup-dgc

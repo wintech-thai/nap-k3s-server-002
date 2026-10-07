@@ -1,0 +1,65 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: mysql-binlog-cleanup
+spec:
+  schedule: "0 2 * * *"
+  timeZone: "Asia/Bangkok"
+  concurrencyPolicy: Forbid
+
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 3
+
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+
+          containers:
+            - name: mysql-binlog-cleanup
+              image: mysql:8.0
+              imagePullPolicy: IfNotPresent
+
+              env:
+                - name: MYSQL_PWD
+                  valueFrom:
+                    secretKeyRef:
+                      name: wordpress-db-login
+                      key: mysql-root-password
+
+              command:
+                - /bin/sh
+                - -c
+                - |
+                  echo "========================================"
+                  echo "Binary logs BEFORE cleanup"
+                  echo "========================================"
+
+                  mysql \
+                    -h web-napbiotec-main-mysql \
+                    -u root \
+                    -e "SHOW BINARY LOGS;"
+
+                  echo ""
+                  echo "========================================"
+                  echo "Purging binary logs older than 3 days"
+                  echo "========================================"
+
+                  mysql \
+                    -h web-napbiotec-main-mysql \
+                    -u root \
+                    -e "PURGE BINARY LOGS BEFORE (NOW() - INTERVAL 3 DAY);"
+
+                  echo ""
+                  echo "========================================"
+                  echo "Binary logs AFTER cleanup"
+                  echo "========================================"
+
+                  mysql \
+                    -h web-napbiotec-main-mysql \
+                    -u root \
+                    -e "SHOW BINARY LOGS;"
+
+                  echo ""
+                  echo "Cleanup completed."

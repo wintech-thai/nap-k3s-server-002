@@ -3,7 +3,7 @@
 apiVersion: monitoring.coreos.com/v1alpha1
 kind: AlertmanagerConfig
 metadata:
-  name: alerts-slack-01
+  name: alerts-discord-01
   namespace: monitoring
 spec:
   receivers:
@@ -28,7 +28,7 @@ spec:
         matchers:
           - matchType: =~
             name: alertname
-            value: 'KubeControllerManagerDown|KubeProxyDown|KubeSchedulerDown|InfoInhibitor|etcdInsufficientMembers|etcdMembersDown'
+            value: 'KubeControllerManagerDown|KubeProxyDown|KubeSchedulerDown|InfoInhibitor|etcdInsufficientMembers|etcdMembersDown|PrometheusDuplicateTimestamps'
         groupInterval: 5m
         groupWait: 30s
         receiver: null-notifications
@@ -42,7 +42,7 @@ spec:
             value: 'TargetDown'
           - matchType: =~
             name: job
-            value: 'kube-controller-manager|kube-scheduler|kube-etcd'
+            value: 'kube-controller-manager|kube-scheduler|kube-etcd|kube-prometheus-crds-grafana'
         groupInterval: 5m
         groupWait: 30s
         receiver: null-notifications

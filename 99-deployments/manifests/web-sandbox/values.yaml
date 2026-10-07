@@ -65,7 +65,7 @@ backupRestore:
   timeZone: "Asia/Bangkok"
   s3TransferTimeoutSec: 3600
 
-  backupSchedule: "0 19 * * *"    # daily 19:00
+  backupSchedule: "0 2 * * *"    # daily 02:00
   restoreSchedule: "30 19 * * *"  # 30 min after backup, daily 19:30
   suspendBackup: true
   suspendRestore: true            # only meant to run on the NEW server once migration cutover begins
@@ -85,4 +85,4 @@ backupRestore:
     url: https://storage.googleapis.com
     bucket: devhubs-backup
     bucketPath: sandbox
-    filePrefix: wp-backup
+    filePrefix: wp-backup-dgc
