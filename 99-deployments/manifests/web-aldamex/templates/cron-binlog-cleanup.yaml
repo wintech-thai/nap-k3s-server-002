@@ -37,7 +37,7 @@ spec:
                   echo "========================================"
 
                   mysql \
-                    -h web-aldamex-main-mysql \
+                    -h web-aldamex-production-mysql \
                     -u root \
                     -e "SHOW BINARY LOGS;"
 
@@ -47,7 +47,7 @@ spec:
                   echo "========================================"
 
                   mysql \
-                    -h web-aldamex-main-mysql \
+                    -h web-aldamex-production-mysql \
                     -u root \
                     -e "PURGE BINARY LOGS BEFORE (NOW() - INTERVAL 3 DAY);"
 
@@ -57,7 +57,7 @@ spec:
                   echo "========================================"
 
                   mysql \
-                    -h web-aldamex-main-mysql \
+                    -h web-aldamex-production-mysql \
                     -u root \
                     -e "SHOW BINARY LOGS;"
 
