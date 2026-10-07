@@ -10,7 +10,7 @@ spec:
           custom: "true"
   template:
     metadata:
-      name: 'web-aldamex-{{name}}'
+      name: 'web-aldamex-production'
     spec:
       project: "default"
       source:
