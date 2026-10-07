@@ -95,4 +95,4 @@ backupRestore:
     url: https://storage.googleapis.com
     bucket: devhubs-backup
     bucketPath: aldamex
-    filePrefix: wp-backup-dgc
+    filePrefix: wp-backup-gcp

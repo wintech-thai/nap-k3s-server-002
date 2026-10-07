@@ -100,4 +100,4 @@ backupRestore:
     url: https://storage.googleapis.com
     bucket: devhubs-backup
     bucketPath: kratomcraft
-    filePrefix: wp-backup-dgc
+    filePrefix: wp-backup-gcp

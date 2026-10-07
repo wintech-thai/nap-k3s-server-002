@@ -93,4 +93,4 @@ backupRestore:
     url: https://storage.googleapis.com
     bucket: devhubs-backup
     bucketPath: napbiotec-v2
-    filePrefix: wp-backup-dgc
+    filePrefix: wp-backup-gcp

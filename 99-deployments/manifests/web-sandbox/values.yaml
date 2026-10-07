@@ -85,4 +85,4 @@ backupRestore:
     url: https://storage.googleapis.com
     bucket: devhubs-backup
     bucketPath: sandbox
-    filePrefix: wp-backup-dgc
+    filePrefix: wp-backup-gcp
