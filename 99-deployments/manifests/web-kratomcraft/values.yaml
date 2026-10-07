@@ -32,7 +32,7 @@ wordpress:
     enabled: false
 
   externalDatabase:
-    host: web-kratomcraft-main-mysql
+    host: web-kratomcraft-production-mysql
     port: 3306
     database: wordpress
     user: root
@@ -43,7 +43,7 @@ wordpress:
   # causing CrashLoopBackOff on every pod restart. Applied to all 7 WP sites.
   extraEnvVars:
     - name: WORDPRESS_DATABASE_HOST
-      value: web-kratomcraft-main-mysql
+      value: web-kratomcraft-production-mysql
     - name: WORDPRESS_DATABASE_PORT_NUMBER
       value: "3306"
 
@@ -89,7 +89,7 @@ backupRestore:
   db:
     type: mysql
     namespace: web-kratomcraft
-    podName: web-kratomcraft-main-mysql-0
+    podName: web-kratomcraft-production-mysql-0
 
   app:
     namespace: web-kratomcraft

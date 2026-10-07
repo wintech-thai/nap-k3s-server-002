@@ -10,7 +10,7 @@ spec:
           custom: "true"
   template:
     metadata:
-      name: 'web-youngyou-{{name}}'
+      name: 'web-youngyou-production'
     spec:
       project: "default"
       source:

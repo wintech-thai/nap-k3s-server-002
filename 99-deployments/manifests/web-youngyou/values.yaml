@@ -32,7 +32,7 @@ wordpress:
     enabled: false
 
   externalDatabase:
-    host: web-youngyou-main-mysql
+    host: web-youngyou-production-mysql
     port: 3306
     database: wordpress
     user: root
@@ -43,7 +43,7 @@ wordpress:
   # causing CrashLoopBackOff on every pod restart. Applied to all 7 WP sites.
   extraEnvVars:
     - name: WORDPRESS_DATABASE_HOST
-      value: web-youngyou-main-mysql
+      value: web-youngyou-production-mysql
     - name: WORDPRESS_DATABASE_PORT_NUMBER
       value: "3306"
 
@@ -81,7 +81,7 @@ backupRestore:
   db:
     type: mysql
     namespace: web-youngyou
-    podName: web-youngyou-main-mysql-0
+    podName: web-youngyou-production-mysql-0
 
   app:
     namespace: web-youngyou
