@@ -10,7 +10,7 @@ spec:
           custom: "true"
   template:
     metadata:
-      name: 'web-kratomcraft-{{name}}'
+      name: 'web-kratomcraft-production'
     spec:
       project: "default"
       source:
