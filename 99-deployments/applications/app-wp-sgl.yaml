@@ -15,7 +15,7 @@ spec:
       project: "default"
       source:
         repoURL: https://github.com/wintech-thai/nap-k3s-server-002.git
-        targetRevision: "production" #Based on environment
+        targetRevision: "main" #Based on environment
         path: '99-deployments/manifests/web-sgl'
       destination:
         name: in-cluster
