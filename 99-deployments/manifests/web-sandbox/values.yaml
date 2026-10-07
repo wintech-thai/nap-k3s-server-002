@@ -65,9 +65,9 @@ backupRestore:
   timeZone: "Asia/Bangkok"
   s3TransferTimeoutSec: 3600
 
-  backupSchedule: "0 2 * * *"    # daily 02:00
+  backupSchedule: "0 3 * * *"    # daily 02:00
   restoreSchedule: "30 19 * * *"  # 30 min after backup, daily 19:30
-  suspendBackup: true
+  suspendBackup: false
   suspendRestore: true            # only meant to run on the NEW server once migration cutover begins
   restartAppPodAfterRestore: "false"
 

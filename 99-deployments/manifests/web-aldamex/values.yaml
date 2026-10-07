@@ -75,9 +75,9 @@ backupRestore:
   timeZone: "Asia/Bangkok"
   s3TransferTimeoutSec: 3600
 
-  backupSchedule: "0 19 * * *"
+  backupSchedule: "0 7 * * *"
   restoreSchedule: "30 6 * * *"
-  suspendBackup: true
+  suspendBackup: false
   suspendRestore: true
   restartAppPodAfterRestore: "true"
 
