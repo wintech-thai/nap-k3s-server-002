@@ -56,7 +56,7 @@ mysql:
 # onix-v2-jobs image for the backup/restore CronJobs below. Bump this after
 # tagging a new onix-v2-jobs release (Docker Hub: pjamenaja/onix-v2-jobs).
 onixJobs:
-  imageTag: v1.0.26
+  imageTag: v1.0.30
 
 # The real backup for this site currently runs on its old GCP server
 # (~05:00-06:00 Asia/Bangkok daily), uploading to the devhubs-backup bucket.
