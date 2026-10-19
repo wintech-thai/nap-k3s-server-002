@@ -92,4 +92,4 @@ backupRestore:
     url: https://storage.googleapis.com
     bucket: devhubs-backup
     bucketPath: youngyou
-    filePrefix: wp-backup-gcp
+    filePrefix: wp-backup-mtb
