@@ -27,7 +27,7 @@ spec:
               args: ["app-restore.rb"]
               env:
                 - name: FILE_PREFIX
-                  value: "snipeit-backup-gke"
+                  value: "snipeit-backup"
                   
                 - name: DB_TYPE
                   value: "{{ .Values.backupRestore.db.type }}"
