@@ -1,0 +1,61 @@
+domain1: snipeit.wintech-thai.com
+domain2: snipeit.napbiotec.com
+
+snipeit:
+  enabled: true
+  config:
+    snipeit:
+      url: https://snipeit.napbiotec.com
+      key: base64:uxA0D1SdxZJ5afqbNadLOoPkVzjdmSgneILipsFfclI=
+
+  mysql:
+    enabled: true
+
+  ingress:
+    enabled: false
+
+# onix-v2-jobs image for the backup/restore CronJobs below. Using a
+# develop-<sha> build for now since the new DB_POD_LABEL/APP_POD_LABEL
+# feature hasn't been live-tested yet — confirm the exact tag from the
+# onix-v2-jobs CI/CD Discord channel before triggering the first backup,
+# then swap to a stable vX.Y.Z tag once confirmed working (see
+# feedback_onix_jobs_develop_tag_no_release_needed in project memory).
+onixJobs:
+  imageTag: develop-28f7fb8
+
+# Backup/restore for SnipeIT itself — unlike the WordPress sites this isn't a
+# migration (SnipeIT already lives here on-prem), so backup runs daily as
+# normal and restore stays suspended (manual disaster-recovery trigger only):
+#   kubectl create job --from=cronjob/snipeit-restore snipeit-restore-manual -n snipeit
+backupRestore:
+  enabled: true
+  namePrefix: snipeit
+  timeZone: "Asia/Bangkok"
+
+  backupSchedule: "0 2 * * *"
+  restoreSchedule: "30 7 * * *"
+  suspendBackup: false
+  suspendRestore: true
+  restartAppPodAfterRestore: "true"
+  s3TransferTimeoutSec: 3600
+
+  db:
+    type: mysql
+    namespace: snipeit
+    # SnipeIT's mysql pod is a plain Deployment (not a StatefulSet), so its
+    # pod name changes on every restart — resolve by label instead of a
+    # fixed name. "snipeit-main" alone would also match the app pod
+    # (snipeit-main-mysql-xxx vs snipeit-main-xxx), so a keyword substring
+    # is ambiguous here; the label selector is exact.
+    podLabel: "app.kubernetes.io/name=mysql"
+
+  app:
+    namespace: snipeit
+    podLabel: "app.kubernetes.io/name=snipeit"
+    dataPath: /var/lib/snipeit
+
+  storage:
+    url: https://storage.googleapis.com
+    bucket: devhubs-backup
+    bucketPath: snipeit
+    filePrefix: snipeit-backup-mtb
