@@ -1,6 +1,6 @@
 wordpress:
-  enabled: true
-  replicaCount: 1
+  enabled: true # Set this to false will remove PVC
+  replicaCount: 0
   wordpressScheme: https
   wordpressUsername: admin
   existingSecret: 'wordpress-user-login'
@@ -14,13 +14,13 @@ wordpress:
       nginx.ingress.kubernetes.io/proxy-body-size: 50m
       kubernetes.io/ingress.allow-http: "true" #Wordpress will redirect to https internally  
     ingressClassName: nginx
-    enabled: true
-    hostname: napbiotec.io
-    extraHosts:
-      - name: www.napbiotec.io
-      - name: www.napbiotec.com
-      - name: napbiotec.com
-      - name: napbiotec.wintech-thai.com
+    enabled: false
+    #hostname: napbiotec.io
+    #extraHosts:
+    #  - name: www.napbiotec.io
+    #  - name: www.napbiotec.com
+    #  - name: napbiotec.com
+    #  - name: napbiotec.wintech-thai.com
 
   service:
     type: ClusterIP
@@ -45,7 +45,7 @@ wordpress:
       value: "3306"
 
 mysql:
-  enabled: true
+  enabled: false
   image:
     repository: bitnamilegacy/mysql
     #tag: 8.0.28
