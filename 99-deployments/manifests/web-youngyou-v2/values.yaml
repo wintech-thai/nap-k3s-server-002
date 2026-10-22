@@ -74,12 +74,25 @@ wordpress:
 
 mysql:
   enabled: true
-  image:
-    repository: bitnamilegacy/mysql
-    #tag: 8.0.28
-  auth:
-    database: wordpress
-    existingSecret: wordpress-db-login
+  nameOverride: mysql
+  pods:
+    controller: statefulset
+    replicas: 1
+
+    image:
+      name: docker.io/library/mysql
+      tag: "8.4" #"8.0.33"
+      pullPolicy: IfNotPresent
+
+    env:
+      - name: MYSQL_ROOT_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: wordpress-db-login
+            key: mysql-root-password
+
+      - name: MYSQL_DATABASE
+        value: wordpress
 
 # onix-v2-jobs image for the backup/restore CronJobs below. Bump this after
 # tagging a new onix-v2-jobs release (Docker Hub: pjamenaja/onix-v2-jobs).

@@ -13,7 +13,9 @@ dependencies:
     repository: "https://charts.visonneau.fr/"
     version: "0.0.14"
 
-  - name: mysql
-    version: "9.10.1"
-    repository: "https://charts.bitnami.com/bitnami"
+  ## MySQL ###
+  - name: "generic-app"
+    alias: mysql
     condition: mysql.enabled
+    repository: "https://charts.visonneau.fr/"
+    version: "0.0.14"
