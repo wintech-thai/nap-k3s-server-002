@@ -14,7 +14,7 @@ wordpress:
       nginx.ingress.kubernetes.io/proxy-body-size: 50m
       kubernetes.io/ingress.allow-http: "true" #Wordpress will redirect to https internally  
     ingressClassName: nginx
-    enabled: true
+    enabled: false
     hostname: napbiotec.io
     extraHosts:
       - name: www.napbiotec.io

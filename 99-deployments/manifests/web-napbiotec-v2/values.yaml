@@ -9,10 +9,10 @@ wordpress:
     pathType: Prefix
 
     hosts:
-      #- napbiotec.com
-      #- www.napbiotec.com
-      #- napbiotec.io
-      #- www.napbiotec.io
+      - napbiotec.com
+      - www.napbiotec.com
+      - napbiotec.io
+      - www.napbiotec.io
       - napbiotec-v2.wintech-thai.com
 
   podDisruptionBudget:
