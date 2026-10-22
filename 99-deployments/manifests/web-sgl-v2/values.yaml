@@ -3,7 +3,7 @@ wordpress:
   nameOverride: wordpress
 
   ingress:
-    enabled: false
+    enabled: true
     ingressClassName: nginx
     path: /
     pathType: Prefix
