@@ -9,8 +9,8 @@ wordpress:
     pathType: Prefix
 
     hosts:
-      #- natureagroproduct.com
-      #- www.natureagroproduct.com
+      - natureagroproduct.com
+      - www.natureagroproduct.com
       - nap-v2.wintech-thai.com
 
   podDisruptionBudget:

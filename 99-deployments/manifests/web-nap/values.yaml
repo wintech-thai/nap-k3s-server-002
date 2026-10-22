@@ -18,7 +18,7 @@ wordpress:
       kubernetes.io/ingress.allow-http: "true" #Wordpress will redirect to https internally
 
     ingressClassName: nginx
-    enabled: true
+    enabled: false
     hostname: natureagroproduct.com
     extraHosts:
       - name: www.natureagroproduct.com
