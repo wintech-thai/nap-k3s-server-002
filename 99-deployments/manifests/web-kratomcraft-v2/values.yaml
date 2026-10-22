@@ -9,8 +9,8 @@ wordpress:
     pathType: Prefix
 
     hosts:
-      #- kratomcraft.com
-      #- www.kratomcraft.com
+      - kratomcraft.com
+      - www.kratomcraft.com
       - kratom-v2.wintech-thai.com
 
   podDisruptionBudget:
