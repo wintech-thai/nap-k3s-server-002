@@ -9,8 +9,8 @@ wordpress:
     pathType: Prefix
 
     hosts:
-      #- youngyoushop.com
-      #- www.youngyoushop.com
+      - youngyoushop.com
+      - www.youngyoushop.com
       - youngyou-v2.wintech-thai.com
 
   podDisruptionBudget:
