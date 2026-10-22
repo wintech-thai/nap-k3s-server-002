@@ -1,6 +1,6 @@
 wordpress:
   enabled: true # Set this to false will remove PVC
-  replicaCount: 0
+  replicaCount: 1
   wordpressScheme: https
   wordpressUsername: admin
   existingSecret: 'wordpress-user-login'
@@ -45,7 +45,7 @@ wordpress:
       value: "3306"
 
 mysql:
-  enabled: false
+  enabled: true
   image:
     repository: bitnamilegacy/mysql
     #tag: 8.0.28
