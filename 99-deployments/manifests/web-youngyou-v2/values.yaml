@@ -1,6 +1,6 @@
 wordpress:
   enabled: true
-  nameOverride: youngyou
+  nameOverride: wordpress
 
   ingress:
     enabled: true
@@ -106,12 +106,12 @@ backupRestore:
   db:
     type: mysql
     namespace: web-youngyou-v2
-    podName: web-youngyou-production-mysql-0
+    podName: web-youngyou-v2-production-mysql-0
 
   app:
-    namespace: web-youngyou
+    namespace: web-youngyou-v2
     podKeyword: wordpress
-    dataPath: /bitnami/wordpress
+    dataPath: /var/www/html
 
   storage:
     url: https://storage.googleapis.com
