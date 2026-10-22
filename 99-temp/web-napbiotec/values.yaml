@@ -1,5 +1,5 @@
 wordpress:
-  enabled: false
+  enabled: true
   replicaCount: 1
   wordpressScheme: https
   wordpressUsername: admin
@@ -45,7 +45,7 @@ wordpress:
       value: "3306"
 
 mysql:
-  enabled: false
+  enabled: true
   image:
     repository: bitnamilegacy/mysql
     #tag: 8.0.28
