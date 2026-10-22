@@ -1,6 +1,6 @@
 wordpress:
   enabled: true
-  replicaCount: 1
+  replicaCount: 0
   wordpressScheme: https
   wordpressUsername: admin
   existingSecret: 'wordpress-user-login'
@@ -18,15 +18,15 @@ wordpress:
       kubernetes.io/ingress.allow-http: "true" #Wordpress will redirect to https internally
 
     ingressClassName: nginx # iap-nginx
-    enabled: true
+    enabled: false
     #hostname: temp.internal.napbiotec.io
 
-    hostname: aldamex.com
-    extraHosts:
-      - name: www.aldamex.com
-      - name: aldamexthailand.com
-      - name: www.aldamexthailand.com
-      - name: aldamex.wintech-thai.com
+    #hostname: aldamex.com
+    #extraHosts:
+    #  - name: www.aldamex.com
+    #  - name: aldamexthailand.com
+    #  - name: www.aldamexthailand.com
+    #  - name: aldamex.wintech-thai.com
 
   service:
     type: ClusterIP
@@ -51,7 +51,7 @@ wordpress:
       value: "3306"
 
 mysql:
-  enabled: true
+  enabled: false
   image:
     tag: 8.0.28
     repository: bitnamilegacy/mysql
@@ -70,7 +70,7 @@ onixJobs:
 # daily shortly after the GCP backup window to keep this on-prem copy synced
 # in the meantime.
 backupRestore:
-  enabled: true
+  enabled: false
   namePrefix: aldamex
   timeZone: "Asia/Bangkok"
   s3TransferTimeoutSec: 3600
