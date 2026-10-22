@@ -1,0 +1,158 @@
+wordpress:
+  enabled: true
+  nameOverride: wordpress
+
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+    path: /
+    pathType: Prefix
+
+    hosts:
+      #- natureagroproduct.com
+      #- www.natureagroproduct.com
+      - nap-v2.wintech-thai.com
+
+  podDisruptionBudget:
+    enabled: false
+
+  serviceAccount:
+    create: false
+
+  pods:
+    controller: deployment
+    replicas: 1
+
+    resources:
+      requests:
+        cpu: 300m
+        memory: 512Mi
+
+    image:
+      name: docker.io/library/wordpress
+      tag: 7.1.3-php8.2-apache
+      pullPolicy: IfNotPresent
+
+    ports:
+      - name: http
+        containerPort: 80
+    env:
+      - name: WORDPRESS_DB_HOST
+        value: "web-nap-v2-production-mysql:3306"
+
+      - name: WORDPRESS_DB_NAME
+        value: wordpress
+
+      - name: WORDPRESS_DB_USER
+        value: root
+
+      - name: WORDPRESS_DB_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: wordpress-db-login
+            key: mysql-root-password
+
+      - name: WORDPRESS_TABLE_PREFIX
+        value: wp_
+
+    volumeMounts:
+      - name: wordpress-data
+        mountPath: /var/www/html
+
+    volumes:
+      - name: wordpress-data
+        persistentVolumeClaim:
+          claimName: wordpress-data
+
+  service:
+    enabled: true
+    ports:
+      - name: http
+        port: 80
+        protocol: TCP
+        targetPort: http
+
+mysql:
+  enabled: true
+  nameOverride: mysql
+
+  podDisruptionBudget:
+    enabled: false
+
+  pods:
+    controller: statefulset
+    replicas: 1
+
+    image:
+      name: docker.io/library/mysql
+      tag: "8.4" #"8.0.33"
+      pullPolicy: IfNotPresent
+
+    ports:
+      - name: mysql
+        containerPort: 3306
+
+    env:
+      - name: MYSQL_ROOT_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: wordpress-db-login
+            key: mysql-root-password
+
+      - name: MYSQL_DATABASE
+        value: wordpress
+
+    volumeMounts:
+      - name: mysql-data
+        mountPath: /var/lib/mysql
+
+    volumes:
+      - name: mysql-data
+        persistentVolumeClaim:
+          claimName: mysql-data
+
+  service:
+    enabled: true
+    ports:
+      - name: mysql
+        port: 3306
+        protocol: TCP
+        targetPort: 3306
+
+# onix-v2-jobs image for the backup/restore CronJobs below. Bump this after
+# tagging a new onix-v2-jobs release (Docker Hub: pjamenaja/onix-v2-jobs).
+onixJobs:
+  imageTag: v1.0.31
+
+# The real backup for this site currently runs on its old GCP server
+# (~05:00-06:00 Asia/Bangkok daily), uploading to the devhubs-backup bucket.
+# On-prem's own backup stays suspended until after DNS cutover; restore runs
+# daily shortly after the GCP backup window to keep this on-prem copy synced
+# in the meantime.
+backupRestore:
+  enabled: true
+  namePrefix: nap
+  timeZone: "Asia/Bangkok"
+  s3TransferTimeoutSec: 3600
+
+  backupSchedule: "0 5 * * *"
+  restoreSchedule: "30 6 * * *"
+  suspendBackup: false
+  suspendRestore: true
+  restartAppPodAfterRestore: "true"
+
+  db:
+    type: mysql
+    namespace: web-nap-v2
+    podName: web-nap-v2-production-mysql-0
+
+  app:
+    namespace: web-nap-v2
+    podKeyword: wordpress
+    dataPath: /var/www/html
+
+  storage:
+    url: https://storage.googleapis.com
+    bucket: devhubs-backup
+    bucketPath: nap-v2
+    filePrefix: wp-backup-mtb

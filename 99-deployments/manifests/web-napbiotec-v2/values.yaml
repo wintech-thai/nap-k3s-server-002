@@ -137,7 +137,7 @@ backupRestore:
   timeZone: "Asia/Bangkok"
   s3TransferTimeoutSec: 3600
 
-  backupSchedule: "0 1 * * *"
+  backupSchedule: "0 4 * * *"
   restoreSchedule: "30 6 * * *"
   suspendBackup: false
   suspendRestore: true
