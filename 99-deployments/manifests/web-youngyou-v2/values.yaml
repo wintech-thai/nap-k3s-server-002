@@ -102,6 +102,15 @@ mysql:
       - name: MYSQL_DATABASE
         value: wordpress
 
+    volumeMounts:
+      - name: mysql-data
+        mountPath: /var/lib/mysql
+
+    volumes:
+      - name: mysql-data
+        persistentVolumeClaim:
+          claimName: mysql-data
+
   service:
     enabled: true
     ports:
