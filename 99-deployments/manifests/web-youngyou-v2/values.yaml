@@ -38,7 +38,7 @@ wordpress:
         containerPort: 80
     env:
       - name: WORDPRESS_DB_HOST
-        value: "web-youngyou-production-mysql:3306"
+        value: "web-youngyou-v2-production-mysql:3306"
 
       - name: WORDPRESS_DB_NAME
         value: wordpress
