@@ -88,6 +88,10 @@ mysql:
       tag: "8.4" #"8.0.33"
       pullPolicy: IfNotPresent
 
+    ports:
+      - name: mysql
+        containerPort: 3306
+
     env:
       - name: MYSQL_ROOT_PASSWORD
         valueFrom:
@@ -104,7 +108,7 @@ mysql:
       - name: mysql
         port: 3306
         protocol: TCP
-        targetPort: mysql
+        targetPort: 3306
 
 # onix-v2-jobs image for the backup/restore CronJobs below. Bump this after
 # tagging a new onix-v2-jobs release (Docker Hub: pjamenaja/onix-v2-jobs).
