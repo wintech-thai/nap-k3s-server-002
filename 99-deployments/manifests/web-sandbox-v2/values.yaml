@@ -9,7 +9,7 @@ wordpress:
     pathType: Prefix
 
     hosts:
-      - sandbox.wintech-thai.com
+      - sandbox.napbiotec.io
 
   podDisruptionBudget:
     enabled: false
