@@ -14,7 +14,7 @@ spec:
     spec:
       project: "default"
       source:
-        repoURL: https://github.com/wintech-thai/kratomcraft-k3s-server-002.git
+        repoURL: https://github.com/wintech-thai/nap-k3s-server-002.git
         targetRevision: "{{name}}" #Based on environment
         path: '99-deployments/manifests/web-kratomcraft-v2'
       destination:
