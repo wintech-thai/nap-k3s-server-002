@@ -75,6 +75,10 @@ wordpress:
 mysql:
   enabled: true
   nameOverride: mysql
+
+  podDisruptionBudget:
+    enabled: false
+
   pods:
     controller: statefulset
     replicas: 1
@@ -93,6 +97,14 @@ mysql:
 
       - name: MYSQL_DATABASE
         value: wordpress
+
+  service:
+    enabled: true
+    ports:
+      - name: mysql
+        port: 3306
+        protocol: TCP
+        targetPort: mysql
 
 # onix-v2-jobs image for the backup/restore CronJobs below. Bump this after
 # tagging a new onix-v2-jobs release (Docker Hub: pjamenaja/onix-v2-jobs).
