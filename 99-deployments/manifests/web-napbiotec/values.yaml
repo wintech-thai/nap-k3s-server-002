@@ -15,12 +15,12 @@ wordpress:
       kubernetes.io/ingress.allow-http: "true" #Wordpress will redirect to https internally  
     ingressClassName: nginx
     enabled: true
-    hostname: napbiotec.wintech-thai.com
+    hostname: napbiotec.io
     extraHosts:
       - name: www.napbiotec.io
       - name: www.napbiotec.com
       - name: napbiotec.com
-      - name: napbiotec.io
+      - name: napbiotec.wintech-thai.com
 
   service:
     type: ClusterIP
