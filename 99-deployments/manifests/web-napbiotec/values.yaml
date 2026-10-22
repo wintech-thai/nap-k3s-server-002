@@ -68,7 +68,7 @@ onixJobs:
 # naming from the old server) even though the on-prem namespace/name here is
 # just "napbiotec" — see storage.bucketPath below, don't "fix" this to match.
 backupRestore:
-  enabled: true
+  enabled: false
   namePrefix: napbiotec
   timeZone: "Asia/Bangkok"
   s3TransferTimeoutSec: 3600
