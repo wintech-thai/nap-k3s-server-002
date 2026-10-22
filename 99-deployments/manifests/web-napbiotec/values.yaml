@@ -16,11 +16,11 @@ wordpress:
     ingressClassName: nginx
     enabled: true
     hostname: napbiotec.wintech-thai.com
-    #extraHosts:
-    #  - name: www.napbiotec.io
-    #  - name: www.napbiotec.com
-    #  - name: napbiotec.com
-    #  - name: napbiotec.io
+    extraHosts:
+      - name: www.napbiotec.io
+      - name: www.napbiotec.com
+      - name: napbiotec.com
+      - name: napbiotec.io
 
   service:
     type: ClusterIP
