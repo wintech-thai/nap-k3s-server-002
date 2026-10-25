@@ -6,6 +6,8 @@ only needs values.yaml edited; this template (and the two cronjobs that
 include it) can be copied as-is.
 */}}
 {{- define "backupRestore.env" -}}
+- name: IGNORE_FAILED_READ
+  value: "true"
 - name: DB_TYPE
   value: "{{ .Values.backupRestore.db.type }}"
 - name: DB_NAMESPACE
