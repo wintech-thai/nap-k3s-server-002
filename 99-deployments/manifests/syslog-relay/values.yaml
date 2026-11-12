@@ -91,12 +91,6 @@ vector:
         nodePort: 30140
         protocol: UDP
 
-      - name: syslog-tcp
-        port: 601
-        targetPort: 1601
-        nodePort: 30140
-        protocol: TCP
-
   serviceHeadless:
     enabled: false
 
