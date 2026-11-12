@@ -7,7 +7,6 @@ vector:
 
   image:
     repository: docker.io/timberio/vector
-    #tag: "0.53.0-debian"
     pullPolicy: IfNotPresent
 
   logLevel: info
@@ -27,8 +26,6 @@ vector:
     size: 5Gi
     accessModes:
       - ReadWriteOnce
-    # ใช้ StorageClass ของ k3s
-    #storageClassName: local-path
     retentionPolicy:
       whenDeleted: Retain
       whenScaled: Retain
@@ -39,30 +36,26 @@ vector:
 
     sources:
       syslog_udp:
-        type: syslog
-        address: "0.0.0.0:1514"
+        type: socket
         mode: udp
-
-      syslog_tcp:
-        type: syslog
-        address: "0.0.0.0:1601"
-        mode: tcp
+        address: "0.0.0.0:1514"
+        decoding:
+          codec: bytes
 
     sinks:
       remote_syslog:
         type: socket
-
         inputs:
           - syslog_udp
-          - syslog_tcp
 
         address: "syslog-nap.please-protect.com:30140"
         mode: udp
 
+        framing:
+          method: bytes
+
         encoding:
-          codec: syslog
-          syslog:
-            rfc: rfc3164
+          codec: raw_message
 
         buffer:
           type: disk
@@ -74,10 +67,6 @@ vector:
     - name: syslog-udp
       containerPort: 1514
       protocol: UDP
-
-    - name: syslog-tcp
-      containerPort: 1601
-      protocol: TCP
 
   # Kubernetes Service
   service:
@@ -94,7 +83,6 @@ vector:
   serviceHeadless:
     enabled: false
 
-  # Single instance, no autoscaling
   autoscaling:
     enabled: false
 
