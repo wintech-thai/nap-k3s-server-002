@@ -40,12 +40,12 @@ vector:
     sources:
       syslog_udp:
         type: syslog
-        address: "0.0.0.0:30140"
+        address: "0.0.0.0:1514"
         mode: udp
 
       syslog_tcp:
         type: syslog
-        address: "0.0.0.0:30140"
+        address: "0.0.0.0:1601"
         mode: tcp
 
     sinks:
