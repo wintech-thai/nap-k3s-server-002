@@ -1,0 +1,108 @@
+
+vector:
+  fullnameOverride: syslog-relay
+
+  role: Aggregator
+  replicas: 1
+
+  image:
+    repository: docker.io/timberio/vector
+    #tag: "0.53.0-debian"
+    pullPolicy: IfNotPresent
+
+  logLevel: info
+
+  # Resource allocation
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+
+  # Persistent storage for disk buffer
+  persistence:
+    enabled: true
+    size: 5Gi
+    accessModes:
+      - ReadWriteOnce
+    # ใช้ StorageClass ของ k3s
+    #storageClassName: local-path
+    retentionPolicy:
+      whenDeleted: Retain
+      whenScaled: Retain
+
+  # Vector configuration
+  customConfig:
+    data_dir: /vector-data-dir
+
+    sources:
+      syslog_udp:
+        type: syslog
+        address: "0.0.0.0:30140"
+        mode: udp
+
+      syslog_tcp:
+        type: syslog
+        address: "0.0.0.0:30140"
+        mode: tcp
+
+    sinks:
+      remote_syslog:
+        type: socket
+
+        inputs:
+          - syslog_udp
+          - syslog_tcp
+
+        address: "syslog-nap.please-protect.com:30140"
+        mode: udp
+
+        encoding:
+          codec: syslog
+          syslog:
+            rfc: rfc3164
+
+        buffer:
+          type: disk
+          max_size: 1073741824
+          when_full: block
+
+  # Container ports
+  containerPorts:
+    - name: syslog-udp
+      containerPort: 1514
+      protocol: UDP
+
+    - name: syslog-tcp
+      containerPort: 1601
+      protocol: TCP
+
+  # Kubernetes Service
+  service:
+    enabled: true
+    type: NodePort
+
+    ports:
+      - name: syslog-udp
+        port: 514
+        targetPort: 1514
+        nodePort: 30140
+        protocol: UDP
+
+      - name: syslog-tcp
+        port: 601
+        targetPort: 1601
+        nodePort: 30140
+        protocol: TCP
+
+  serviceHeadless:
+    enabled: false
+
+  # Single instance, no autoscaling
+  autoscaling:
+    enabled: false
+
+  podDisruptionBudget:
+    enabled: false
